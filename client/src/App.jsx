@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [loading, setLoading] = useState(false);
+  const getLocation = () => {
+    setLoading(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, handleError);
+    } else {
+      alert("Geolocation is not supported by this browser.");
+      setLoading(false);
+    }
+  };
+
+  const showPosition = (position) => {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+
+    console.log(`latitude : ${latitude}, Longitude: ${longitude}`);
+    setLocation({ latitude, longitude });
+    setLoading(false);
+  };
+  const handleError = (error) => {
+    console.error("Error occurred. Error code: " + error.code);
+    setLoading(false);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div>
+      <button onClick={getLocation}>
+        {loading ? "Fetching Location" : "send Loacation"}
+      </button>
+      {location.latitude && location.longitude && (
+        <div>
+          Location: {location.latitude} Latitude: {location.longitude}
+        </div>
+      )}
+    </div>
+  );
+};
 
-export default App
+export default App;
