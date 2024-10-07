@@ -29,6 +29,8 @@ const App = () => {
   };
 
   const sendLocation = async (latitude, longitude) => {
+    const url = `${import.meta.env.VITE_SERVER_URL}/api/location/getLocation`;
+    console.log(url);
     const response = await axios.post(
       `${import.meta.env.VITE_SERVER_URL}/api/location/getLocation`,
       {
