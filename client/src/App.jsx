@@ -22,14 +22,14 @@ const App = () => {
     setLoading(false);
   };
   const handleError = (error) => {
-    console.error("Error occurred. Error code: " + error.code);
+    console.error("Error occurred. Error code: " + error);
     setLoading(false);
   };
 
   return (
     <div>
       <button onClick={getLocation}>
-        {loading ? "Fetching Location" : "send Loacation"}
+        {loading ? "Fetching Location" : "send Location"}
       </button>
       {location.latitude && location.longitude && (
         <div>
