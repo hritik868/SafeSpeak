@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import axios from "axios"
 const App = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [loading, setLoading] = useState(false);
@@ -17,15 +17,26 @@ const App = () => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
 
+    sendLocation(latitude, longitude);
     console.log(`latitude : ${latitude}, Longitude: ${longitude}`);
     setLocation({ latitude, longitude });
     setLoading(false);
   };
   const handleError = (error) => {
+    console.log(error);
     console.error("Error occurred. Error code: " + error);
     setLoading(false);
   };
 
+  const sendLocation = async (latitude, longitude) => {
+    const response = await axios.post(
+      "http://127.0.0.1:8000/api/location/getLocation",
+      {
+        latitude,
+        longitude,
+      }
+    );
+  };
   return (
     <div>
       <button onClick={getLocation}>
