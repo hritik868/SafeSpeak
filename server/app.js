@@ -3,12 +3,14 @@ const http = require("http");
 const locationRoutes = require("./routes/locationRoutes");
 const cors = require("cors");
 
+const dotenv = require("dotenv");
+dotenv.config({ path: "./.env" });
+
 const app = express();
 const server = http.createServer(app);
-
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [process.env.ADMIN_URL],
   })
 );
 app.use(express.json());

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 const App = () => {
   const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const App = () => {
 
   const sendLocation = async (latitude, longitude) => {
     const response = await axios.post(
-      "http://127.0.0.1:8000/api/location/getLocation",
+      `${import.meta.env.VITE_SERVER_URL}/api/location/getLocation`,
       {
         latitude,
         longitude,
