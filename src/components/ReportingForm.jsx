@@ -3,12 +3,12 @@ import getLocation from "../utils/fetchLocation";
 import axios from "axios";
 import "./reportingForm.css"; // Assuming you have a CSS file for styles
 
-
 const ReportingForm = () => {
   const [files, setFiles] = useState([]);
   const [location, setLocation] = useState({});
   const [isReporting, setIsReporting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [description, setDescription] = useState(""); // New state for description
 
   const handleFileChange = (e) => {
     const allFiles = Array.from(e.target.files);
@@ -50,10 +50,12 @@ const ReportingForm = () => {
         filesArray: uploadedImageUrls,
         latitude: locationData.latitude,
         longitude: locationData.longitude,
+        description, // Include the description in the request
       });
 
       alert(response.data.Message);
       setFiles([]);
+      setDescription(""); // Clear the description after submission
     } catch (err) {
       setErrorMessage(err.response?.data?.Message || "An error occurred.");
     } finally {
@@ -87,6 +89,17 @@ const ReportingForm = () => {
             ))}
           </div>
         )}
+
+        <label htmlFor="description">Description</label>
+        <textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows="4"
+          placeholder="Add a description of the incident..."
+          required
+        />
+
         <button type="submit" disabled={isReporting}>
           {isReporting ? "Reporting..." : "Submit"}
         </button>
