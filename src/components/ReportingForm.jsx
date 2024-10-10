@@ -39,12 +39,12 @@ const ReportingForm = () => {
           "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
           formData
         );
+        uploadedImageUrls.push(cloudRes.data.secure_url);
       } catch (err) {
         alert("error while reporting");
         setIsReporting(false);
         setFiles([]);
       }
-      uploadedImageUrls.push(cloudRes.data.secure_url);
     });
     await Promise.all(uploadPromises);
 
