@@ -5,6 +5,7 @@ import axios from "axios";
 const ReportingForm = () => {
   const [files, setFiles] = useState([]);
   const [location, setLocation] = useState({});
+  const [isReporting, setIsReporting] = useState(false);
 
   const handleFileChange = (e) => {
     const allFiles = Array.from(e.target.files);
@@ -21,7 +22,7 @@ const ReportingForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsReporting(true);
     const locationData = await getLocation();
     setLocation(locationData);
 
@@ -32,10 +33,17 @@ const ReportingForm = () => {
       formData.append("file", file.fileObj);
       formData.append("upload_preset", "SafeSpeak");
       formData.append("cloud_name", "dfylu3ufc");
-      const cloudRes = await axios.post(
-        "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
-        formData
-      );
+
+      try {
+        const cloudRes = await axios.post(
+          "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
+          formData
+        );
+      } catch (err) {
+        alert("error while reporting");
+        setIsReporting(false);
+        setFiles([]);
+      }
       uploadedImageUrls.push(cloudRes.data.secure_url);
     });
     await Promise.all(uploadPromises);
@@ -51,6 +59,7 @@ const ReportingForm = () => {
         longitude: locationData.longitude,
       });
       console.log(response);
+      setIsReporting(false);
       alert(response.data.Message);
       setFiles([]);
     } catch (err) {
@@ -66,7 +75,7 @@ const ReportingForm = () => {
         <input
           type="file"
           id="incident-files"
-          accept="video/*,image/*"
+          accept="image/*"
           capture="environment"
           onChange={handleFileChange}
           required
@@ -86,6 +95,8 @@ const ReportingForm = () => {
           </div>
         )}
         <button type="submit">submit</button>
+
+        {isReporting && <p>Reportingg.......</p>}
       </form>
     </div>
   );
