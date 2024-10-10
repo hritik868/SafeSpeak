@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import getLocation from "../utils/fetchLocation";
 import axios from "axios";
+import "./reportingForm.css"; // Assuming you have a CSS file for styles
+
 
 const ReportingForm = () => {
   const [files, setFiles] = useState([]);
   const [location, setLocation] = useState({});
   const [isReporting, setIsReporting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleFileChange = (e) => {
     const allFiles = Array.from(e.target.files);
-    const tempArr = allFiles.map((file) => {
-      return {
-        fileObj: file,
-        fileName: file.name,
-        filePreview: URL.createObjectURL(file),
-      };
-    });
+    const tempArr = allFiles.map((file) => ({
+      fileObj: file,
+      fileName: file.name,
+      filePreview: URL.createObjectURL(file),
+    }));
 
     setFiles(tempArr);
   };
@@ -23,55 +24,48 @@ const ReportingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsReporting(true);
-    const locationData = await getLocation();
-    setLocation(locationData);
-
-    const uploadedImageUrls = [];
-
-    const uploadPromises = files.map(async (file) => {
-      const formData = new FormData();
-      formData.append("file", file.fileObj);
-      formData.append("upload_preset", "SafeSpeak");
-      formData.append("cloud_name", "dfylu3ufc");
-
-      try {
-        const cloudRes = await axios.post(
-          "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
-          formData
-        );
-        uploadedImageUrls.push(cloudRes.data.secure_url);
-      } catch (err) {
-        alert("error while reporting");
-        setIsReporting(false);
-        setFiles([]);
-      }
-    });
-    await Promise.all(uploadPromises);
-
-    const url = `${
-      import.meta.env.VITE_SERVER_URL
-    }/api/location/reportAnonymous`;
+    setErrorMessage("");
 
     try {
+      const locationData = await getLocation();
+      setLocation(locationData);
+
+      const uploadedImageUrls = await Promise.all(
+        files.map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file.fileObj);
+          formData.append("upload_preset", "SafeSpeak");
+          formData.append("cloud_name", "dfylu3ufc");
+
+          const cloudRes = await axios.post(
+            "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
+            formData
+          );
+          return cloudRes.data.secure_url;
+        })
+      );
+
+      const url = `${import.meta.env.VITE_SERVER_URL}/api/location/reportAnonymous`;
       const response = await axios.post(url, {
         filesArray: uploadedImageUrls,
         latitude: locationData.latitude,
         longitude: locationData.longitude,
       });
-      console.log(response);
-      setIsReporting(false);
+
       alert(response.data.Message);
       setFiles([]);
     } catch (err) {
-      alert(err.response.data.Message);
+      setErrorMessage(err.response?.data?.Message || "An error occurred.");
+    } finally {
+      setIsReporting(false);
     }
   };
+
   return (
-    <div>
+    <div className="reporting-form">
+      <h2>Report an Incident</h2>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="incident-files">
-          Upload Images/Videos Of Incidents
-        </label>
+        <label htmlFor="incident-files">Upload Images/Videos of Incident</label>
         <input
           type="file"
           id="incident-files"
@@ -80,23 +74,23 @@ const ReportingForm = () => {
           onChange={handleFileChange}
           required
           multiple
-        ></input>
+        />
         {files.length > 0 && (
-          <div>
+          <div className="file-previews">
             {files.map((file, index) => (
               <img
                 key={index}
                 src={file.filePreview}
                 alt={file.fileName}
-                width="40"
-                height="40"
-              ></img>
+                className="file-preview"
+              />
             ))}
           </div>
         )}
-        <button type="submit">submit</button>
-
-        {isReporting && <p>Reportingg.......</p>}
+        <button type="submit" disabled={isReporting}>
+          {isReporting ? "Reporting..." : "Submit"}
+        </button>
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </form>
     </div>
   );
