@@ -89,7 +89,7 @@ const ReportingForm = () => {
         <input
           type="file"
           id="incident-files"
-          accept="image/*,video/*"
+          accept="image/*"
           capture="environment"
           onChange={handleFileChange}
           required
