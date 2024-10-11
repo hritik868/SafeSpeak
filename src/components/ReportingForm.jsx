@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import getLocation from "../utils/fetchLocation";
 import axios from "axios";
 import "./reportingForm.css"; // Assuming you have a CSS file for styles
@@ -9,6 +9,15 @@ const ReportingForm = () => {
   const [isReporting, setIsReporting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [description, setDescription] = useState(""); // New state for description
+
+  useEffect(() => {
+    async function fetch() {
+      const locationData = await getLocation();
+      setLocation(locationData);
+      console.log("Fetched");
+    }
+    fetch();
+  }, []);
 
   const handleFileChange = (e) => {
     const allFiles = Array.from(e.target.files);
@@ -27,9 +36,6 @@ const ReportingForm = () => {
     setErrorMessage("");
 
     try {
-      const locationData = await getLocation();
-      setLocation(locationData);
-
       const uploadedImageUrls = await Promise.all(
         files.map(async (file) => {
           const formData = new FormData();
@@ -45,11 +51,13 @@ const ReportingForm = () => {
         })
       );
 
-      const url = `${import.meta.env.VITE_SERVER_URL}/api/location/reportAnonymous`;
+      const url = `${
+        import.meta.env.VITE_SERVER_URL
+      }/api/location/reportAnonymous`;
       const response = await axios.post(url, {
         filesArray: uploadedImageUrls,
-        latitude: locationData.latitude,
-        longitude: locationData.longitude,
+        latitude: location.latitude,
+        longitude: location.longitude,
         description, // Include the description in the request
       });
 
