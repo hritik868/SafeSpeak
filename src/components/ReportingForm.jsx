@@ -17,6 +17,10 @@ const ReportingForm = () => {
       console.log("Fetched");
     }
     fetch();
+
+    return () => {
+      files.forEach((file) => URL.revokeObjectURL(file.filePreview));
+    };
   }, []);
 
   const handleFileChange = (e) => {
@@ -24,6 +28,7 @@ const ReportingForm = () => {
     const tempArr = allFiles.map((file) => ({
       fileObj: file,
       fileName: file.name,
+      fileType: file.type,
       filePreview: URL.createObjectURL(file),
     }));
 
@@ -43,10 +48,15 @@ const ReportingForm = () => {
           formData.append("upload_preset", "SafeSpeak");
           formData.append("cloud_name", "dfylu3ufc");
 
-          const cloudRes = await axios.post(
-            "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
-            formData
-          );
+          const uploadOptions = {
+            url: file.fileType.startsWith("video")
+              ? "https://api.cloudinary.com/v1_1/dfylu3ufc/video/upload"
+              : "https://api.cloudinary.com/v1_1/dfylu3ufc/image/upload",
+            method: "POST",
+            data: formData,
+          };
+
+          const cloudRes = await axios(uploadOptions);
           return cloudRes.data.secure_url;
         })
       );
@@ -79,7 +89,7 @@ const ReportingForm = () => {
         <input
           type="file"
           id="incident-files"
-          accept="image/*"
+          accept="image/*,video/*"
           capture="environment"
           onChange={handleFileChange}
           required
@@ -87,14 +97,23 @@ const ReportingForm = () => {
         />
         {files.length > 0 && (
           <div className="file-previews">
-            {files.map((file, index) => (
-              <img
-                key={index}
-                src={file.filePreview}
-                alt={file.fileName}
-                className="file-preview"
-              />
-            ))}
+            {files.map((file, index) =>
+              file.fileType.startsWith("image") ? (
+                <img
+                  key={index}
+                  src={file.filePreview}
+                  alt={file.fileName}
+                  className="file-preview"
+                />
+              ) : file.fileType.startsWith("video") ? (
+                <video
+                  key={index}
+                  src={file.filePreview}
+                  controls
+                  className="file-preview"
+                />
+              ) : null
+            )}
           </div>
         )}
 
