@@ -23,17 +23,29 @@ const ReportingForm = () => {
     };
   }, []);
 
-  const handleFileChange = (e) => {
-    const allFiles = Array.from(e.target.files);
-    const tempArr = allFiles.map((file) => ({
-      fileObj: file,
-      fileName: file.name,
-      fileType: file.type,
-      filePreview: URL.createObjectURL(file),
-    }));
+  // const handleFileChange = (e) => {
+  //   const allFiles = Array.from(e.target.files);
+  //   const tempArr = allFiles.map((file) => ({
+  //     fileObj: file,
+  //     fileName: file.name,
+  //     fileType: file.type,
+  //     filePreview: URL.createObjectURL(file),
+  //   }));
 
-    setFiles(tempArr);
-  };
+  //   setFiles(tempArr);
+  // };
+  function handleFileChange(event) {
+  const file = event.target.files[0];
+  
+  if (file) {
+    // Optional: Check if the file is an image or video
+    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+      alert("Please use the camera to capture an image or video.");
+      event.target.value = ''; // Clear the input
+    }
+  }
+}
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
