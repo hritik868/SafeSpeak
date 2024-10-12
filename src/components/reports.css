@@ -1,0 +1,26 @@
+.reports-page {
+    padding: 20px;
+  }
+  
+  .report-item {
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .report-files {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .report-image {
+    max-width: 100px;
+    margin-right: 10px;
+  }
+  
+  .report-video {
+    max-width: 200px;
+    margin-right: 10px;
+  }
+  
