@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./reports.css"; 
+import "./reports.css";
 
 const ReportsPage = () => {
   const [reports, setReports] = useState([]);
@@ -10,8 +10,10 @@ const ReportsPage = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}/api/location/getAllReports`);
-        setReports(response.data); // Adjust based on your API response structure
+        const response = await axios.get(
+          `${import.meta.env.VITE_SERVER_URL}/api/location/getAllReports`
+        );
+        setReports(response.data.reports); // Adjust based on your API response structure
       } catch (err) {
         setError(err.response?.data?.Message || "Failed to fetch reports.");
       } finally {
@@ -35,15 +37,28 @@ const ReportsPage = () => {
           {reports.map((report, index) => (
             <li key={index} className="report-item">
               <h3>Description: {report.description}</h3>
-              <p>Location: {report.latitude}, {report.longitude}</p>
+              <p>
+                {report.location?.latitude ?? ""}{" "}
+                {report.location?.longitude ?? ""}
+              </p>
               <div className="report-files">
-                {report.filesArray.map((fileUrl, idx) => (
-                  fileUrl.endsWith('.mp4') ? (
-                    <video key={idx} src={fileUrl} controls className="report-video" />
+                {report.filesArray.map((fileUrl, idx) =>
+                  fileUrl.endsWith(".mp4") ? (
+                    <video
+                      key={idx}
+                      src={fileUrl}
+                      controls
+                      className="report-video"
+                    />
                   ) : (
-                    <img key={idx} src={fileUrl} alt={`Report file ${idx}`} className="report-image" />
+                    <img
+                      key={idx}
+                      src={fileUrl}
+                      alt={`Report file ${idx}`}
+                      className="report-image"
+                    />
                   )
-                ))}
+                )}
               </div>
             </li>
           ))}
