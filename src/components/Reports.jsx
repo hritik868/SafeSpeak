@@ -6,6 +6,7 @@ const ReportsPage = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -26,6 +27,15 @@ const ReportsPage = () => {
 
   if (loading) return <p>Loading reports...</p>;
   if (error) return <p className="error-message">{error}</p>;
+  if (!reports || !Array.isArray(reports) || reports.length === 0) {
+    return (
+      <div className="no-reports-message">
+        <h3>No Reports Available</h3>
+        <p>Please check back later.</p>
+      </div>
+    );
+  }
+  
 
   return (
     <div className="reports-page">
