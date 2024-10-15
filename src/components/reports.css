@@ -57,3 +57,15 @@ h2 {
 .no-reports-message p {
   color: #555; /* Gray for the paragraph */
 }
+.report-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #b0e0e6;
+  border-radius: 5px;
+  background-color: #e6f7ff;
+}
+
+.map-container {
+  height: 300px; /* Adjust height as needed */
+  width: 100%;
+}

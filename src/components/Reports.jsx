@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import "leaflet/dist/leaflet.css";
 import "./reports.css";
 
 const ReportsPage = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -35,45 +36,43 @@ const ReportsPage = () => {
       </div>
     );
   }
-  
 
   return (
     <div className="reports-page">
       <h2>All Reports</h2>
-      {reports.length === 0 ? (
-        <p>No reports available.</p>
-      ) : (
-        <ul>
-          {reports.map((report, index) => (
-            <li key={index} className="report-item">
-              <h3>Description: {report.description}</h3>
-              <p>
-                {report.location?.latitude ?? ""}{" "}
-                {report.location?.longitude ?? ""}
-              </p>
-              <div className="report-files">
-                {report.filesArray.map((fileUrl, idx) =>
-                  fileUrl.endsWith(".mp4") ? (
-                    <video
-                      key={idx}
-                      src={fileUrl}
-                      controls
-                      className="report-video"
-                    />
-                  ) : (
-                    <img
-                      key={idx}
-                      src={fileUrl}
-                      alt={`Report file ${idx}`}
-                      className="report-image"
-                    />
-                  )
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {reports.map((report, index) => (
+          <li key={index} className="report-item">
+            <h3>Description: {report.description}</h3>
+            {report.location?.latitude && report.location?.longitude && (
+              <MapContainer
+                center={[report.location.latitude, report.location.longitude]}
+                zoom={13}
+                style={{ height: "300px", width: "100%" }}
+              >
+                <TileLayer
+                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                />
+                <Marker position={[report.location.latitude, report.location.longitude]}>
+                  <Popup>
+                    {report.description}
+                  </Popup>
+                </Marker>
+              </MapContainer>
+            )}
+            <div className="report-files">
+              {report.filesArray.map((fileUrl, idx) =>
+                fileUrl.endsWith(".mp4") ? (
+                  <video key={idx} src={fileUrl} controls className="report-video" />
+                ) : (
+                  <img key={idx} src={fileUrl} alt={`Report file ${idx}`} className="report-image" />
+                )
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
