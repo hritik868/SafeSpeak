@@ -5,23 +5,26 @@ import "./reportingForm.css"; // Assuming you have a CSS file for styles
 
 const ReportingForm = () => {
   const [files, setFiles] = useState([]);
-  const [location, setLocation] = useState({});
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
   const [isReporting, setIsReporting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [description, setDescription] = useState(""); // New state for description
 
   useEffect(() => {
-    async function fetch() {
-      const locationData = await getLocation();
-      setLocation(locationData);
-      console.log("Fetched");
-    }
     fetch();
-
     return () => {
       files.forEach((file) => URL.revokeObjectURL(file.filePreview));
     };
   }, []);
+
+  async function fetch() {
+    try {
+      const locationData = await getLocation();
+      setLocation(locationData);
+    } catch (error) {
+      alert("Failed Fetching Location");
+    }
+  }
 
   const handleFileChange = (e) => {
     const allFiles = Array.from(e.target.files);
@@ -34,21 +37,15 @@ const ReportingForm = () => {
 
     setFiles(tempArr);
   };
-//   function handleFileChange(event) {
-//   const file = event.target.files[0];
-  
-//   if (file) {
-//     // Optional: Check if the file is an image or video
-//     if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
-//       alert("Please use the camera to capture an image or video.");
-//       event.target.value = ''; // Clear the input
-//     }
-//   }
-// }
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (location.latitude == null || location.longitude == null) {
+      alert("Location can't be fetched, unable to report!");
+      fetch();
+      setIsReporting(false);
+      return;
+    }
     setIsReporting(true);
     setErrorMessage("");
 
