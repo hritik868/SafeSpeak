@@ -47,7 +47,6 @@ const ReportingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (location.latitude == null || location.longitude == null) {
-      alert("Error! Enable Location In Settings");
       fetch();
       setIsReporting(false);
       return;
