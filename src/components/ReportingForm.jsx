@@ -22,7 +22,13 @@ const ReportingForm = () => {
       const locationData = await getLocation();
       setLocation(locationData);
     } catch (error) {
-      alert("Failed Fetching Location");
+      if (error.code === error.PERMISSION_DENIED) {
+        alert(
+          "Location access denied. Please enable location services in your browser settings."
+        );
+      } else {
+        alert("Failed Fetching Location");
+      }
     }
   }
 
