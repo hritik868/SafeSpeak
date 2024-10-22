@@ -30,15 +30,16 @@
 // export default App;
 
 import React from "react";
+import { Toaster } from "@/components/ui/toaster"
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ReportingForm from "./components/ReportingForm"; // Adjust the path as necessary
 import ReportsPage from "./components/Reports"; // Adjust the path as necessary
+import ReportingPage from "./Pages/ReportingPage";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<ReportingForm />} />
+        <Route path="/" element={<ReportingPage />} />
         <Route path="/reports" element={<ReportsPage />} />
       </Routes>
     </BrowserRouter>

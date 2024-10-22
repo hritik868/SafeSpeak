@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import getLocation from "../utils/fetchLocation";
 import axios from "axios";
-import "./reportingForm.css"; // Assuming you have a CSS file for styles
+
 
 const ReportingForm = () => {
   const [files, setFiles] = useState([]);

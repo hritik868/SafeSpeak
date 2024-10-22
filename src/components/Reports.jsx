@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
-import "./reports.css";
+// import "./reports.css";
 
 const ReportsPage = () => {
   const [reports, setReports] = useState([]);

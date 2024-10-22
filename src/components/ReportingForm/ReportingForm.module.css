@@ -1,0 +1,19 @@
+.filepreviews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px; /* Space below file previews */
+}
+
+.filepreview {
+    width: 49%;
+    height: 200px;
+    object-fit: cover;
+    border: 2px solid #4a90e2; /* Border color for file previews */
+    border-radius: 4px;
+    transition: transform 0.3s; /* Adding a hover effect */
+}
+
+.filepreview:hover {
+    transform: scale(1.05); /* Scale up on hover */
+}

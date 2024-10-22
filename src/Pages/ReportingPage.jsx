@@ -1,8 +1,14 @@
 import React from "react";
-
-import ReportingForm from "../components/ReportingForm";
-
+import { Toaster } from "@/components/ui/toaster";
+import ReportingForm from "../components/ReportingForm/ReportingForm";
+import { Navbar } from "../components/Navbar/Navbar";
 const ReportingPage = () => {
-  return <ReportingForm />;
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-200 flex flex-col">
+      <Toaster />
+      <Navbar />
+      <ReportingForm />
+    </div>
+  );
 };
 export default ReportingPage;
