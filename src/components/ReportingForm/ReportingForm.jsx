@@ -69,7 +69,6 @@ const ReportingForm = () => {
   }
   const handleFileChange = (e) => {
     const allFiles = Array.from(e.target.files);
-    console.log(e.target.files);
     const validFiles = [];
     allFiles.forEach((file) => {
       if (file.size > MAX_FILE_SIZE) {
