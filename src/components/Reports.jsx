@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
+import L from 'leaflet';
+
+// Custom marker icon setup
+const customMarkerIcon = L.icon({
+  iconUrl: '/path/to/your/pointer-icon.png', // Replace with your icon's path
+  iconSize: [30, 45], // Size of the icon
+  iconAnchor: [15, 45], // Anchor point of the icon
+  popupAnchor: [0, -34], // Anchor point for the popup
+});
 
 const SkeletonLoader = () => (
   <div className="animate-pulse">
@@ -100,7 +109,7 @@ const ReportsPage = () => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                   />
-                  <Marker position={[report.location.latitude, report.location.longitude]}>
+                  <Marker position={[report.location.latitude, report.location.longitude]} icon={customMarkerIcon}>
                     <Popup>{report.description}</Popup>
                   </Marker>
                 </MapContainer>
