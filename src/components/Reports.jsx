@@ -6,7 +6,7 @@ import L from 'leaflet';
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
-  iconUrl: './pin.png', // Replace with your icon's path
+  iconUrl: 'https://cdn-icons-mp4.flaticon.com/512/11201/11201834.mp4', // Replace with your icon's path
   iconSize: [30, 45],
   iconAnchor: [15, 45],
   popupAnchor: [0, -34],
