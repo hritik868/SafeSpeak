@@ -34,20 +34,13 @@ const ReportsPage = () => {
     fetchReports();
   }, []);
 
-  const toggleResolvedStatus = async (reportId) => {
-    try {
-      // Call API to update the resolved status (assuming an endpoint exists)
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/location/updateStatus`, { reportId });
-      
-      // Update the local state
-      setReports((prevReports) =>
-        prevReports.map((report) =>
-          report.id === reportId ? { ...report, resolved: !report.resolved } : report
-        )
-      );
-    } catch (err) {
-      setError("Failed to update status.");
-    }
+  const toggleResolvedStatus = (reportId) => {
+    // Update the local state to toggle the resolved status
+    setReports((prevReports) =>
+      prevReports.map((report) =>
+        report.id === reportId ? { ...report, resolved: !report.resolved } : report
+      )
+    );
   };
 
   // Skeleton Loader for loading state
