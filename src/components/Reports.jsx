@@ -6,7 +6,7 @@ import L from 'leaflet';
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
-  iconUrl: 'https://img.freepik.com/free-vector/location-pin-half-shadow_78370-7899.jpg?semt=ais_hybrid', // Replace with your icon's path
+  iconUrl: 'https://cdn-icons-mp4.flaticon.com/512/9305/9305845.mp4', // Replace with your icon's path
   iconSize: [30, 45],
   iconAnchor: [15, 45],
   popupAnchor: [0, -34],
