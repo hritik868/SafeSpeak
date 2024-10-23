@@ -6,7 +6,7 @@ import L from 'leaflet';
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
-  iconUrl: 'https://cdn-icons-mp4.flaticon.com/512/11201/11201834.mp4', // Replace with your icon's path
+  iconUrl: 'https://img.freepik.com/free-vector/location-pin-half-shadow_78370-7899.jpg?semt=ais_hybrid', // Replace with your icon's path
   iconSize: [30, 45],
   iconAnchor: [15, 45],
   popupAnchor: [0, -34],
@@ -82,8 +82,8 @@ const ReportsPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold text-blue-800 mb-6 text-center">All Reports</h2>
+    <div className="container mx-auto p-6 bg-blue-50 rounded-lg shadow-lg">
+      <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
       <ul className="space-y-8">
         {reports.map((report, index) => (
           <li
