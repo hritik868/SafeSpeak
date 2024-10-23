@@ -3,7 +3,6 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 
-
 const SkeletonLoader = () => (
   <div className="animate-pulse">
     <div className="h-6 bg-blue-300 rounded mb-4"></div>
@@ -34,6 +33,22 @@ const ReportsPage = () => {
 
     fetchReports();
   }, []);
+
+  const toggleResolvedStatus = async (reportId) => {
+    try {
+      // Call API to update the resolved status (assuming an endpoint exists)
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/location/updateStatus`, { reportId });
+      
+      // Update the local state
+      setReports((prevReports) =>
+        prevReports.map((report) =>
+          report.id === reportId ? { ...report, resolved: !report.resolved } : report
+        )
+      );
+    } catch (err) {
+      setError("Failed to update status.");
+    }
+  };
 
   // Skeleton Loader for loading state
   if (loading) {
@@ -120,6 +135,18 @@ const ReportsPage = () => {
                   />
                 )
               )}
+            </div>
+
+            {/* Resolved Status Button */}
+            <div className="mt-4">
+              <button
+                onClick={() => toggleResolvedStatus(report.id)}
+                className={`py-2 px-4 rounded-lg font-semibold ${
+                  report.resolved ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                }`}
+              >
+                {report.resolved ? 'Mark as Not Resolved' : 'Mark as Resolved'}
+              </button>
             </div>
           </li>
         ))}
