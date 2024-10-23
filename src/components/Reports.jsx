@@ -6,7 +6,7 @@ import L from 'leaflet';
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
-  iconUrl: 'https://cdn-icons-mp4.flaticon.com/512/9305/9305845.mp4', // Replace with your icon's path
+  iconUrl: 'https://img.freepik.com/free-vector/location-pin-half-shadow_78370-7899.jpg?semt=ais_hybrid', // Replace with your icon's path
   iconSize: [30, 45],
   iconAnchor: [15, 45],
   popupAnchor: [0, -34],
@@ -133,23 +133,43 @@ const ReportsPage = () => {
             </div>
 
             {/* Report Files (images/videos) */}
-            <div className="grid grid-cols-2 gap-4 mt-6">
-              {report.filesArray.map((fileUrl, idx) =>
-                fileUrl.endsWith(".mp4") ? (
+            <div className="mt-6">
+              {report.filesArray.length === 1 ? (
+                // Single file (image/video) takes full width
+                report.filesArray[0].endsWith(".mp4") ? (
                   <video
-                    key={idx}
-                    src={fileUrl}
+                    src={report.filesArray[0]}
                     controls
-                    className="rounded-lg shadow-sm w-full h-56 object-cover"
+                    className="rounded-lg shadow-sm w-full h-auto object-cover"
                   />
                 ) : (
                   <img
-                    key={idx}
-                    src={fileUrl}
-                    alt={`Report file ${idx}`}
-                    className="rounded-lg shadow-sm w-full h-56 object-cover"
+                    src={report.filesArray[0]}
+                    alt="Report file"
+                    className="rounded-lg shadow-sm w-full h-auto object-cover"
                   />
                 )
+              ) : (
+                // Multiple files (image/video) in grid
+                <div className="grid grid-cols-2 gap-4">
+                  {report.filesArray.map((fileUrl, idx) =>
+                    fileUrl.endsWith(".mp4") ? (
+                      <video
+                        key={idx}
+                        src={fileUrl}
+                        controls
+                        className="rounded-lg shadow-sm w-full h-auto object-cover"
+                      />
+                    ) : (
+                      <img
+                        key={idx}
+                        src={fileUrl}
+                        alt={`Report file ${idx}`}
+                        className="rounded-lg shadow-sm w-full h-auto object-cover"
+                      />
+                    )
+                  )}
+                </div>
               )}
             </div>
           </li>
