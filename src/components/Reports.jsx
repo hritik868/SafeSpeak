@@ -6,10 +6,10 @@ import L from 'leaflet';
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
-  iconUrl: 'https://img.freepik.com/free-vector/location-pin-half-shadow_78370-7899.jpg?semt=ais_hybrid', // Replace with your icon's path
-  iconSize: [30, 45], // Size of the icon
-  iconAnchor: [15, 45], // Anchor point of the icon
-  popupAnchor: [0, -34], // Anchor point for the popup
+  iconUrl: './pin.png', // Replace with your icon's path
+  iconSize: [30, 45],
+  iconAnchor: [15, 45],
+  popupAnchor: [0, -34],
 });
 
 const SkeletonLoader = () => (
@@ -44,7 +44,6 @@ const ReportsPage = () => {
   }, []);
 
   const toggleResolvedStatus = (reportId) => {
-    // Update the local state to toggle the resolved status
     setReports((prevReports) =>
       prevReports.map((report) =>
         report.id === reportId ? { ...report, resolved: !report.resolved } : report
@@ -52,7 +51,6 @@ const ReportsPage = () => {
     );
   };
 
-  // Skeleton Loader for loading state
   if (loading) {
     return (
       <div className="container mx-auto p-4">
@@ -66,7 +64,6 @@ const ReportsPage = () => {
     );
   }
 
-  // Error handling
   if (error) {
     return (
       <div className="text-center text-red-500 font-bold py-4">
@@ -75,7 +72,6 @@ const ReportsPage = () => {
     );
   }
 
-  // No reports available
   if (!reports || reports.length === 0) {
     return (
       <div className="text-center text-gray-700 py-10">
@@ -92,34 +88,52 @@ const ReportsPage = () => {
         {reports.map((report, index) => (
           <li
             key={index}
-            className="bg-blue-50 shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
+            className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
           >
-            <h3 className="text-xl font-semibold mb-2 text-blue-900">Description: {report.description}</h3>
-
-            {/* Location with Map */}
-            {report.location?.latitude && report.location?.longitude ? (
-              <div className="mb-4">
-                <MapContainer
-                  center={[report.location.latitude, report.location.longitude]}
-                  zoom={13}
-                  style={{ height: "300px", width: "100%", borderRadius: "8px" }}
-                  className="overflow-hidden"
-                >
-                  <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <Marker position={[report.location.latitude, report.location.longitude]} icon={customMarkerIcon}>
-                    <Popup>{report.description}</Popup>
-                  </Marker>
-                </MapContainer>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Description */}
+              <div className="flex flex-col justify-between">
+                <h3 className="text-xl font-semibold mb-2 text-blue-900">
+                  Description: {report.description}
+                </h3>
+                {/* Resolved Status Button */}
+                <div className="mt-4">
+                  <button
+                    onClick={() => toggleResolvedStatus(report.id)}
+                    className={`py-2 px-4 rounded-lg font-semibold ${
+                      report.resolved ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                    }`}
+                  >
+                    {report.resolved ? 'Mark as Not Resolved' : 'Mark as Resolved'}
+                  </button>
+                </div>
               </div>
-            ) : (
-              <div className="h-64 bg-blue-200 rounded animate-pulse"></div>
-            )}
+
+              {/* Location Map */}
+              <div>
+                {report.location?.latitude && report.location?.longitude ? (
+                  <MapContainer
+                    center={[report.location.latitude, report.location.longitude]}
+                    zoom={13}
+                    style={{ height: "300px", width: "100%", borderRadius: "8px" }}
+                    className="overflow-hidden shadow-sm"
+                  >
+                    <TileLayer
+                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    />
+                    <Marker position={[report.location.latitude, report.location.longitude]} icon={customMarkerIcon}>
+                      <Popup>{report.description}</Popup>
+                    </Marker>
+                  </MapContainer>
+                ) : (
+                  <div className="h-64 bg-blue-200 rounded animate-pulse"></div>
+                )}
+              </div>
+            </div>
 
             {/* Report Files (images/videos) */}
-            <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="grid grid-cols-2 gap-4 mt-6">
               {report.filesArray.map((fileUrl, idx) =>
                 fileUrl.endsWith(".mp4") ? (
                   <video
@@ -137,18 +151,6 @@ const ReportsPage = () => {
                   />
                 )
               )}
-            </div>
-
-            {/* Resolved Status Button */}
-            <div className="mt-4">
-              <button
-                onClick={() => toggleResolvedStatus(report.id)}
-                className={`py-2 px-4 rounded-lg font-semibold ${
-                  report.resolved ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
-                }`}
-              >
-                {report.resolved ? 'Mark as Not Resolved' : 'Mark as Resolved'}
-              </button>
             </div>
           </li>
         ))}
