@@ -157,7 +157,7 @@ const ReportsPage = () => {
                   <img
                     src={report.filesArray[0]}
                     alt="Report file"
-                    className="rounded-lg shadow-sm w-full h-52 object-contain"
+                    className="rounded-lg shadow-sm w-full h-96 object-contain"
                   />
                 )
               ) : (
