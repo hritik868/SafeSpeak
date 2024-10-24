@@ -3,6 +3,7 @@ import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import "leaflet/dist/leaflet.css";
 import L from 'leaflet';
+import { format } from 'date-fns'; // Importing date-fns for formatting dates
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
@@ -96,10 +97,20 @@ const ReportsPage = () => {
                 <h3 className="text-xl font-semibold mb-2 text-blue-900">
                   Description: {report.description}
                 </h3>
+
+                <p className="text-sm font-medium mb-2">
+                  Category: {report.category}
+                </p>
+
+                {/* Submission Time */}
+                <p className="text-sm text-gray-500">
+                  Submitted on: {format(new Date(report.createdAt), "MMMM dd, yyyy 'at' hh:mm a")}
+                </p>
+
                 {/* Resolved Status Button */}
                 <div className="mt-4">
                   <button
-                    onClick={() => toggleResolvedStatus(report.id)}
+                    onClick={() => toggleResolvedStatus(report._id)}
                     className={`py-2 px-4 rounded-lg font-semibold ${
                       report.resolved ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
                     }`}
