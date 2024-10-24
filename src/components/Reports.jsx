@@ -83,7 +83,7 @@ const ReportsPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 bg-blue-50 rounded-lg shadow-lg">
+    <div className="container mx-auto p-6 bg-blue-100 rounded-lg shadow-lg">
       <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
       <ul className="space-y-8">
         {reports.map((report, index) => (
