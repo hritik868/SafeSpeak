@@ -99,9 +99,10 @@ const ReportsPage = () => {
     return <div className="text-center">No Reports Available</div>;
   }
 
-  return (
+  return (<>
+    <Navbar />
     <div className="container mx-auto p-6 bg-white rounded-lg shadow-md">
-      <Navbar />
+      
       <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
       <TextField
         label="Search Reports"
@@ -154,7 +155,7 @@ const ReportsPage = () => {
         </DialogContent>
       </Dialog>
     </div>
-  );
+    </>);
 };
 
 export default ReportsPage;
