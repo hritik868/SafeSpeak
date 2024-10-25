@@ -5,15 +5,6 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { format } from "date-fns"; // Importing date-fns for formatting dates
 
-// Fix for Leaflet default icons
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
-
 const SkeletonLoader = () => (
   <div className="animate-pulse">
     <div className="h-6 bg-blue-300 rounded mb-4"></div>
@@ -48,7 +39,7 @@ const ReportsPage = () => {
   const toggleResolvedStatus = (reportId) => {
     setReports((prevReports) =>
       prevReports.map((report) =>
-        report._id === reportId
+        report.id === reportId
           ? { ...report, resolved: !report.resolved }
           : report
       )
@@ -101,7 +92,7 @@ const ReportsPage = () => {
             className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Description and Status */}
+              {/* Description */}
               <div className="flex flex-col justify-between">
                 <h3 className="text-xl font-semibold mb-2 text-blue-900">
                   Description: {report.description}
@@ -124,10 +115,11 @@ const ReportsPage = () => {
                 <div className="mt-4">
                   <button
                     onClick={() => toggleResolvedStatus(report._id)}
-                    className={`py-2 px-4 rounded-lg font-semibold ${report.resolved
-                      ? "bg-green-500 text-white"
-                      : "bg-red-500 text-white"
-                      }`}
+                    className={`py-2 px-4 rounded-lg font-semibold ${
+                      report.resolved
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
+                    }`}
                   >
                     {report.resolved
                       ? "Mark as Not Resolved"
@@ -137,7 +129,7 @@ const ReportsPage = () => {
               </div>
 
               {/* Location Map */}
-              <div className="flex flex-col">
+              <div>
                 {report.location?.latitude && report.location?.longitude ? (
                   <MapContainer
                     center={[
@@ -150,7 +142,7 @@ const ReportsPage = () => {
                       width: "100%",
                       borderRadius: "8px",
                     }}
-                    className="overflow-hidden shadow-sm mb-4"
+                    className="overflow-hidden shadow-sm"
                   >
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -166,50 +158,50 @@ const ReportsPage = () => {
                     </Marker>
                   </MapContainer>
                 ) : (
-                  <div className="h-64 bg-blue-200 rounded animate-pulse mb-4"></div>
+                  <div className="h-64 bg-blue-200 rounded animate-pulse"></div>
                 )}
+              </div>
+            </div>
 
-                {/* Report Files (images/videos) */}
-                <div className="mt-6">
-                  {report.filesArray.length === 1 ? (
-                    // Single file (image/video) takes full width
-                    report.filesArray[0].endsWith(".mp4") ? (
+            {/* Report Files (images/videos) */}
+            <div className="mt-6">
+              {report.filesArray.length === 1 ? (
+                // Single file (image/video) takes full width
+                report.filesArray[0].endsWith(".mp4") ? (
+                  <video
+                    src={report.filesArray[0]}
+                    controls
+                    className="rounded-lg shadow-sm w-full h-auto object-cover"
+                  />
+                ) : (
+                  <img
+                    src={report.filesArray[0]}
+                    alt="Report file"
+                    className="rounded-lg shadow-sm w-full h-96 object-contain"
+                  />
+                )
+              ) : (
+                // Multiple files (image/video) in grid
+                <div className="grid grid-cols-2 gap-4">
+                  {report.filesArray.map((fileUrl, idx) =>
+                    fileUrl.endsWith(".mp4") ? (
                       <video
-                        src={report.filesArray[0]}
+                        key={idx}
+                        src={fileUrl}
                         controls
                         className="rounded-lg shadow-sm w-full h-auto object-cover"
                       />
                     ) : (
                       <img
-                        src={report.filesArray[0]}
-                        alt="Report file"
-                        className="rounded-lg shadow-sm w-full h-96 object-contain"
+                        key={idx}
+                        src={fileUrl}
+                        alt={`Report file ${idx}`}
+                        className="rounded-lg shadow-sm w-full h-auto object-cover"
                       />
                     )
-                  ) : (
-                    // Multiple files (image/video) in grid
-                    <div className="grid grid-cols-2 gap-4">
-                      {report.filesArray.map((fileUrl, idx) =>
-                        fileUrl.endsWith(".mp4") ? (
-                          <video
-                            key={idx}
-                            src={fileUrl}
-                            controls
-                            className="rounded-lg shadow-sm w-full h-auto object-cover"
-                          />
-                        ) : (
-                          <img
-                            key={idx}
-                            src={fileUrl}
-                            alt={`Report file ${idx}`}
-                            className="rounded-lg shadow-sm w-full h-auto object-cover"
-                          />
-                        )
-                      )}
-                    </div>
                   )}
                 </div>
-              </div>
+              )}
             </div>
           </li>
         ))}
