@@ -158,9 +158,10 @@ const ReportsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Description */}
               <div className="flex flex-col justify-between">
-                <h3 className="text-xl font-semibold mb-2 text-blue-100">
-                  Description: {report.description}
+                <h3 className="text-xl font-semibold mb-2 ">
+                  Description: 
                 </h3>
+                <p>{report.description}</p>
 
                 <p className="text-sm font-medium mb-2">
                   Category: {report.category}
