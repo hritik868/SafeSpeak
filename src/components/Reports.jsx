@@ -164,7 +164,7 @@ const ReportsPage = () => {
                 <p>{report.description}</p>
 
                 <p className="text-xl font-medium mb-1 text-blue-700">
-                  Category: 
+                  Category
                 </p>
                 <p>{report.category}</p>
                 
