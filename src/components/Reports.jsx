@@ -2,16 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import { format } from "date-fns"; // Importing date-fns for formatting dates
-
-// Custom marker icon setup
-const customMarkerIcon = L.icon({
-  iconUrl: "https://cdn-icons-mp4.flaticon.com/512/9305/9305845.mp4", // Replace with your icon's path
-  iconSize: [30, 45],
-  iconAnchor: [15, 45],
-  popupAnchor: [0, -34],
-});
 
 const SkeletonLoader = () => (
   <div className="animate-pulse">
@@ -161,7 +152,6 @@ const ReportsPage = () => {
                         report.location.latitude,
                         report.location.longitude,
                       ]}
-                      icon={customMarkerIcon}
                     >
                       <Popup>{report.description}</Popup>
                     </Marker>
