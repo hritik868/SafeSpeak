@@ -304,7 +304,7 @@ const ReportingForm = () => {
                   </div>
                 </div>
                 <ReCAPTCHA
-                  sitekey="s6LdYhmsqAAAAABohk5OPSNSJs188BxghKCmUWp7h"
+                  sitekey="6LfSs2sqAAAAAEfVKTZH5tEVESh3V-7dRbjditaN"
                   onChange={handleRecaptchaChange}
                 />
               </div>
