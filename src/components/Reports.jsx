@@ -18,6 +18,23 @@ const ReportsPage = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+
+  const fixedId = "admin"; // Fixed ID
+  const fixedPassword = "admin"; // Fixed password
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (userId === fixedId && password === fixedPassword) {
+      setAuthenticated(true);
+      setUserId("");
+      setPassword("");
+    } else {
+      setError("Invalid credentials. Please try again.");
+    }
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -33,18 +50,65 @@ const ReportsPage = () => {
       }
     };
 
-    fetchReports();
-  }, []);
+    if (authenticated) {
+      fetchReports();
+    }
+  }, [authenticated]);
 
   const toggleResolvedStatus = (reportId) => {
     setReports((prevReports) =>
       prevReports.map((report) =>
-        report.id === reportId
+        report._id === reportId
           ? { ...report, resolved: !report.resolved }
           : report
       )
     );
   };
+
+  if (!authenticated) {
+    return (
+      <div className="container mx-auto p-6">
+        <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">
+          Login
+        </h2>
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        <form onSubmit={handleLogin} className="max-w-sm mx-auto">
+          <div className="mb-4">
+            <label className="block text-gray-700" htmlFor="userId">
+              User ID
+            </label>
+            <input
+              type="text"
+              id="userId"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              className="mt-1 block w-full border rounded-md p-2"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700" htmlFor="password">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full border rounded-md p-2"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded-md"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -161,10 +225,7 @@ const ReportsPage = () => {
                   <div className="h-64 bg-blue-200 rounded animate-pulse"></div>
                 )}
               </div>
-            </div>
-
-            {/* Report Files (images/videos) */}
-            <div className="mt-6">
+              <div className="mt-6">
               {report.filesArray.length === 1 ? (
                 // Single file (image/video) takes full width
                 report.filesArray[0].endsWith(".mp4") ? (
@@ -203,6 +264,10 @@ const ReportsPage = () => {
                 </div>
               )}
             </div>
+            </div>
+
+            {/* Report Files (images/videos) */}
+            
           </li>
         ))}
       </ul>
