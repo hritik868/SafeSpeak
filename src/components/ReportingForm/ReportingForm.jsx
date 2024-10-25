@@ -51,6 +51,7 @@ const ReportingForm = () => {
   }, [files]);
 
   const handleRecaptchaChange = (token) => {
+    console.log(token);
     setRecaptchaToken(token);
   };
   async function fetch() {
@@ -144,6 +145,7 @@ const ReportingForm = () => {
         longitude: location.longitude,
         description, // Include the description in the request
         category,
+        recaptchaToken,
       });
 
       toast({
@@ -153,6 +155,7 @@ const ReportingForm = () => {
       setDescription(""); // Clear the description after submission
       setCategory("");
     } catch (err) {
+      console.log(err);
       toast({
         title: "Error submitting report",
         description: err.response?.data?.Message || "An error occurred.",
@@ -281,32 +284,12 @@ const ReportingForm = () => {
                     </div>
                   )}
                 </div>
-              </div>
-            )}
-
-            {step === 3 && (
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="captcha">Captcha Verification</Label>
-                  <div className="flex items-center space-x-2">
-                    <div className="relative flex-grow">
-                      <AlertCircle className="absolute left-3 top-2 h-5 w-5 text-blue-400" />
-                      <Input
-                        id="captcha"
-                        placeholder="Enter captcha"
-                        required
-                        className="pl-10"
-                      />
-                    </div>
-                    <div className="bg-blue-100 p-2 text-sm rounded">
-                      CAPTCHA placeholder
-                    </div>
-                  </div>
+                <div className="space-y-4 justify-center flex">
+                  <ReCAPTCHA
+                    sitekey="6LfSs2sqAAAAAEfVKTZH5tEVESh3V-7dRbjditaN"
+                    onChange={handleRecaptchaChange}
+                  />
                 </div>
-                <ReCAPTCHA
-                  sitekey="6LfSs2sqAAAAAEfVKTZH5tEVESh3V-7dRbjditaN"
-                  onChange={handleRecaptchaChange}
-                />
               </div>
             )}
           </CardContent>
@@ -320,7 +303,7 @@ const ReportingForm = () => {
                 <ChevronLeft className="mr-2 h-4 w-4" /> Previous
               </Button>
             )}
-            {step < 3 ? (
+            {step < 2 ? (
               <Button
                 type="button"
                 onClick={() => setStep(step + 1)}
