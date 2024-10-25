@@ -158,14 +158,16 @@ const ReportsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Description */}
               <div className="flex flex-col justify-between">
-                <h3 className="text-xl font-semibold mb-1 ">
+                <h3 className="text-xl font-semibold mb-1 text-blue-700">
                   Description
                 </h3>
                 <p>{report.description}</p>
 
-                <p className="text-sm font-medium mb-2">
-                  Category: {report.category}
+                <p className="text-xl font-medium mb-1 text-blue-700">
+                  Category: 
                 </p>
+                <p>{report.category}</p>
+                
 
                 {/* Submission Time */}
                 <p className="text-sm text-gray-500">
