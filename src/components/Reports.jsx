@@ -2,23 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from 'leaflet'; // Import Leaflet for marker icons
-import { format } from "date-fns";
-
-// Fix for Leaflet default icons
-delete L.Icon.Default.prototype._getIconUrl;
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
-});
+import L from "leaflet";
+import { format } from "date-fns"; // Importing date-fns for formatting dates
 
 const SkeletonLoader = () => (
   <div className="animate-pulse">
     <div className="h-6 bg-blue-300 rounded mb-4"></div>
     <div className="h-4 bg-blue-300 rounded w-3/4 mb-2"></div>
-    <div className="h-4 bg-blue-300 rounded w-1/2 mb-2"></div>
+    <div className="h-4 bg-blue-300 rounded w-1/2"></div>
     <div className="mt-4 h-64 bg-blue-200 rounded"></div>
   </div>
 );
@@ -48,7 +39,7 @@ const ReportsPage = () => {
   const toggleResolvedStatus = (reportId) => {
     setReports((prevReports) =>
       prevReports.map((report) =>
-        report._id === reportId // Ensure this matches your report structure
+        report.id === reportId
           ? { ...report, resolved: !report.resolved }
           : report
       )
@@ -124,11 +115,10 @@ const ReportsPage = () => {
                 <div className="mt-4">
                   <button
                     onClick={() => toggleResolvedStatus(report._id)}
-                    className={`py-2 px-4 rounded-lg font-semibold ${
-                      report.resolved
-                        ? "bg-green-500 text-white"
-                        : "bg-red-500 text-white"
-                    }`}
+                    className={`py-2 px-4 rounded-lg font-semibold ${report.resolved
+                      ? "bg-green-500 text-white"
+                      : "bg-red-500 text-white"
+                      }`}
                   >
                     {report.resolved
                       ? "Mark as Not Resolved"
