@@ -149,6 +149,7 @@ const ReportsPage = () => {
       <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">
         All Reports
       </h2>
+      // Inside your map function for reports
       <ul className="space-y-8">
         {reports.map((report, index) => (
           <li
@@ -158,8 +159,8 @@ const ReportsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Description */}
               <div className="flex flex-col justify-between">
-                <h3 className="text-xl font-semibold mb-2 ">
-                  Description: 
+                <h3 className="text-xl font-semibold mb-1 ">
+                  Description
                 </h3>
                 <p>{report.description}</p>
 
@@ -180,11 +181,10 @@ const ReportsPage = () => {
                 <div className="mt-4">
                   <button
                     onClick={() => toggleResolvedStatus(report._id)}
-                    className={`py-2 px-4 rounded-lg font-semibold ${
-                      report.resolved
+                    className={`py-2 px-4 rounded-lg font-semibold ${report.resolved
                         ? "bg-green-500 text-white"
                         : "bg-red-500 text-white"
-                    }`}
+                      }`}
                   >
                     {report.resolved
                       ? "Mark as Not Resolved"
@@ -226,52 +226,54 @@ const ReportsPage = () => {
                   <div className="h-64 bg-blue-200 rounded animate-pulse"></div>
                 )}
               </div>
-              <div className="mt-6">
-              {report.filesArray.length === 1 ? (
-                // Single file (image/video) takes full width
-                report.filesArray[0].endsWith(".mp4") ? (
-                  <video
-                    src={report.filesArray[0]}
-                    controls
-                    className="rounded-lg shadow-sm w-full h-auto object-cover"
-                  />
-                ) : (
-                  <img
-                    src={report.filesArray[0]}
-                    alt="Report file"
-                    className="rounded-lg shadow-sm w-full h-96 object-contain"
-                  />
-                )
-              ) : (
-                // Multiple files (image/video) in grid
-                <div className="grid grid-cols-2 gap-4">
-                  {report.filesArray.map((fileUrl, idx) =>
-                    fileUrl.endsWith(".mp4") ? (
-                      <video
-                        key={idx}
-                        src={fileUrl}
-                        controls
-                        className="rounded-lg shadow-sm w-full h-auto object-cover"
-                      />
-                    ) : (
-                      <img
-                        key={idx}
-                        src={fileUrl}
-                        alt={`Report file ${idx}`}
-                        className="rounded-lg shadow-sm w-full h-auto object-cover"
-                      />
-                    )
-                  )}
-                </div>
-              )}
-            </div>
             </div>
 
             {/* Report Files (images/videos) */}
-            
+            {report.filesArray.length > 0 && (
+              <div className="mt-6">
+                {report.filesArray.length === 1 ? (
+                  // Single file (image/video) takes full width
+                  report.filesArray[0].endsWith(".mp4") ? (
+                    <video
+                      src={report.filesArray[0]}
+                      controls
+                      className="rounded-lg shadow-sm w-full h-auto object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={report.filesArray[0]}
+                      alt="Report file"
+                      className="rounded-lg shadow-sm w-full h-96 object-contain"
+                    />
+                  )
+                ) : (
+                  // Multiple files (image/video) in grid
+                  <div className="grid grid-cols-2 gap-4">
+                    {report.filesArray.map((fileUrl, idx) =>
+                      fileUrl.endsWith(".mp4") ? (
+                        <video
+                          key={idx}
+                          src={fileUrl}
+                          controls
+                          className="rounded-lg shadow-sm w-full h-auto object-cover"
+                        />
+                      ) : (
+                        <img
+                          key={idx}
+                          src={fileUrl}
+                          alt={`Report file ${idx}`}
+                          className="rounded-lg shadow-sm w-full h-auto object-cover"
+                        />
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </li>
         ))}
       </ul>
+
     </div>
   );
 };
