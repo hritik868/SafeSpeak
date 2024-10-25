@@ -149,7 +149,6 @@ const ReportsPage = () => {
       <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">
         All Reports
       </h2>
-      // Inside your map function for reports
       <ul className="space-y-8">
         {reports.map((report, index) => (
           <li
