@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from 'leaflet';
-import { format } from 'date-fns'; // Importing date-fns for formatting dates
+import L from "leaflet";
+import { format } from "date-fns"; // Importing date-fns for formatting dates
 
 // Custom marker icon setup
 const customMarkerIcon = L.icon({
-  iconUrl: 'https://cdn-icons-mp4.flaticon.com/512/9305/9305845.mp4', // Replace with your icon's path
+  iconUrl: "https://cdn-icons-mp4.flaticon.com/512/9305/9305845.mp4", // Replace with your icon's path
   iconSize: [30, 45],
   iconAnchor: [15, 45],
   popupAnchor: [0, -34],
@@ -33,7 +33,7 @@ const ReportsPage = () => {
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/api/location/getAllReports`
         );
-        setReports(response.data.reports); 
+        setReports(response.data.reports);
       } catch (err) {
         setError(err.response?.data?.Message || "Failed to fetch reports.");
       } finally {
@@ -47,7 +47,9 @@ const ReportsPage = () => {
   const toggleResolvedStatus = (reportId) => {
     setReports((prevReports) =>
       prevReports.map((report) =>
-        report.id === reportId ? { ...report, resolved: !report.resolved } : report
+        report.id === reportId
+          ? { ...report, resolved: !report.resolved }
+          : report
       )
     );
   };
@@ -55,7 +57,9 @@ const ReportsPage = () => {
   if (loading) {
     return (
       <div className="container mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-6 text-blue-800">Loading Reports...</h2>
+        <h2 className="text-2xl font-bold mb-6 text-blue-800">
+          Loading Reports...
+        </h2>
         <div className="grid gap-6">
           {[...Array(3)].map((_, idx) => (
             <SkeletonLoader key={idx} />
@@ -76,7 +80,9 @@ const ReportsPage = () => {
   if (!reports || reports.length === 0) {
     return (
       <div className="text-center text-gray-700 py-10">
-        <h3 className="text-2xl font-semibold text-blue-800">No Reports Available</h3>
+        <h3 className="text-2xl font-semibold text-blue-800">
+          No Reports Available
+        </h3>
         <p className="text-gray-500 mt-2">Please check back later.</p>
       </div>
     );
@@ -84,7 +90,9 @@ const ReportsPage = () => {
 
   return (
     <div className="container mx-auto p-6 bg-blue-100 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
+      <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">
+        All Reports
+      </h2>
       <ul className="space-y-8">
         {reports.map((report, index) => (
           <li
@@ -104,7 +112,11 @@ const ReportsPage = () => {
 
                 {/* Submission Time */}
                 <p className="text-sm text-gray-500">
-                  Submitted on: {format(new Date(report.createdAt), "MMMM dd, yyyy 'at' hh:mm a")}
+                  Submitted on:{" "}
+                  {format(
+                    new Date(report.createdAt),
+                    "MMMM dd, yyyy 'at' hh:mm a"
+                  )}
                 </p>
 
                 {/* Resolved Status Button */}
@@ -112,10 +124,14 @@ const ReportsPage = () => {
                   <button
                     onClick={() => toggleResolvedStatus(report._id)}
                     className={`py-2 px-4 rounded-lg font-semibold ${
-                      report.resolved ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                      report.resolved
+                        ? "bg-green-500 text-white"
+                        : "bg-red-500 text-white"
                     }`}
                   >
-                    {report.resolved ? 'Mark as Not Resolved' : 'Mark as Resolved'}
+                    {report.resolved
+                      ? "Mark as Not Resolved"
+                      : "Mark as Resolved"}
                   </button>
                 </div>
               </div>
@@ -124,16 +140,29 @@ const ReportsPage = () => {
               <div>
                 {report.location?.latitude && report.location?.longitude ? (
                   <MapContainer
-                    center={[report.location.latitude, report.location.longitude]}
+                    center={[
+                      report.location.latitude,
+                      report.location.longitude,
+                    ]}
                     zoom={13}
-                    style={{ height: "300px", width: "100%", borderRadius: "8px" }}
+                    style={{
+                      height: "300px",
+                      width: "100%",
+                      borderRadius: "8px",
+                    }}
                     className="overflow-hidden shadow-sm"
                   >
                     <TileLayer
                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                       attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     />
-                    <Marker position={[report.location.latitude, report.location.longitude]} icon={customMarkerIcon}>
+                    <Marker
+                      position={[
+                        report.location.latitude,
+                        report.location.longitude,
+                      ]}
+                      icon={customMarkerIcon}
+                    >
                       <Popup>{report.description}</Popup>
                     </Marker>
                   </MapContainer>

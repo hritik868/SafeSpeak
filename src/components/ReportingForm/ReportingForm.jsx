@@ -30,6 +30,7 @@ import { useToast } from "@/hooks/use-toast";
 import styles from "./ReportingForm.module.css";
 import getLocation from "../../utils/fetchLocation";
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const ReportingForm = () => {
   const { toast } = useToast();
@@ -40,6 +41,7 @@ const ReportingForm = () => {
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
   const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [recaptchaToken, setRecaptchaToken] = useState("");
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
   useEffect(() => {
@@ -48,6 +50,9 @@ const ReportingForm = () => {
     };
   }, [files]);
 
+  const handleRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+  };
   async function fetch() {
     try {
       const locationData = await getLocation();
@@ -298,6 +303,10 @@ const ReportingForm = () => {
                     </div>
                   </div>
                 </div>
+                <ReCAPTCHA
+                  sitekey="s6LdYhmsqAAAAABohk5OPSNSJs188BxghKCmUWp7h"
+                  onChange={handleRecaptchaChange}
+                />
               </div>
             )}
           </CardContent>
