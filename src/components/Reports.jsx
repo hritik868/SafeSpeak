@@ -203,7 +203,7 @@ const ReportsPage = () => {
                     zoom={13}
                     style={{
                       height: "300px",
-                      width: "100%",
+                      width: "50%",
                       borderRadius: "8px",
                     }}
                     className="overflow-hidden shadow-sm"
