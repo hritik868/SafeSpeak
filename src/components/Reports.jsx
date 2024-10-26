@@ -123,8 +123,8 @@ const ReportsPage = () => {
         fullWidth
         onChange={(e) => setFilter(e.target.value)}
       />
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper}className="mt-5">
+        <Table className="bg-blue-100">
           <TableHead>
             <TableRow>
               <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>ID</TableCell>
