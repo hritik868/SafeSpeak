@@ -106,7 +106,7 @@ const ReportsPage = () => {
       </div>
     </nav>
     <div className="container mt-5 mx-auto p-6 bg-white rounded-lg shadow-md">
-      
+
       <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
       <TextField
         label="Search Reports"
@@ -117,20 +117,20 @@ const ReportsPage = () => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-          <TableRow>
-  <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>ID</TableCell>
-  <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Category</TableCell>
-  <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Description</TableCell>
-  <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Submitted On</TableCell>
-  <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Action</TableCell>
-</TableRow>
+            <TableRow>
+              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>ID</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Category</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Description</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Submitted On</TableCell>
+              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Action</TableCell>
+            </TableRow>
 
           </TableHead>
           <TableBody>
             {filteredReports.map((report) => (
               <TableRow key={report._id}>
                 <TableCell>{report._id}</TableCell>
-                <TableCell>{report.category?report.category: "No Category Present"}</TableCell>
+                <TableCell>{report.category ? report.category : "No Category Present"}</TableCell>
                 <TableCell>{report.description}</TableCell>
                 <TableCell>{format(new Date(report.createdAt), "MMMM dd, yyyy 'at' hh:mm a")}</TableCell>
                 <TableCell>
@@ -162,7 +162,7 @@ const ReportsPage = () => {
         </DialogContent>
       </Dialog>
     </div>
-    </>);
+  </>);
 };
 
 export default ReportsPage;
