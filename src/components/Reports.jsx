@@ -16,6 +16,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Avatar from '@mui/material/Avatar';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const ReportsPage = () => {
   const [reports, setReports] = useState([]);
@@ -75,10 +78,10 @@ const ReportsPage = () => {
 
   if (!authenticated) {
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto mt-56 p-6">
         <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">Login</h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
-        <form onSubmit={handleLogin} className="max-w-sm mx-auto">
+        <form onSubmit={handleLogin} className="max-w-sm mx-auto ">
           <TextField label="User ID" variant="outlined" fullWidth value={userId} onChange={(e) => setUserId(e.target.value)} required />
           <TextField label="Password" type="password" variant="outlined" fullWidth value={password} onChange={(e) => setPassword(e.target.value)} required />
           <Button type="submit" variant="contained" color="primary" fullWidth>Login</Button>
@@ -88,8 +91,13 @@ const ReportsPage = () => {
   }
 
   if (loading) {
-    return <div className="text-center">Loading Reports...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-blue-500 text-3xl">Loading Reports...</div>
+      </div>
+    );
   }
+  
 
   if (error) {
     return <div className="text-center text-red-500 font-bold">{error}</div>;
@@ -101,8 +109,9 @@ const ReportsPage = () => {
 
   return (<>
     <nav className="bg-white shadow-md p-4">
-      <div className="container mx-auto flex items-center justify-center">
+      <div className="container mx-auto justify-between flex items-center">
         <div className="text-3xl font-bold text-blue-800">SafeSpeak</div>
+        <Avatar sx={{}}>PM</Avatar>
       </div>
     </nav>
     <div className="container mt-5 mx-auto p-6 bg-white rounded-lg shadow-md">
