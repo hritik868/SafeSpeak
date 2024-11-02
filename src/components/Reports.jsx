@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
 import axios from "axios";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { format } from "date-fns";
-import { Navbar } from "./Navbar/Navbar";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -17,8 +17,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 
 const ReportsPage = () => {
   const [reports, setReports] = useState([]);
@@ -33,6 +31,8 @@ const ReportsPage = () => {
 
   const fixedId = "admin";
   const fixedPassword = "admin";
+  
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -72,6 +72,10 @@ const ReportsPage = () => {
     setSelectedReport(null);
   };
 
+  const handleInsightsRedirect = () => {
+    navigate("/charts");
+  };
+
   const filteredReports = reports.filter(report =>
     report.description.toLowerCase().includes(filter.toLowerCase())
   );
@@ -97,7 +101,6 @@ const ReportsPage = () => {
       </div>
     );
   }
-  
 
   if (error) {
     return <div className="text-center text-red-500 font-bold">{error}</div>;
@@ -107,71 +110,77 @@ const ReportsPage = () => {
     return <div className="text-center">No Reports Available</div>;
   }
 
-  return (<>
-    <nav className="bg-white shadow-md p-4">
-      <div className="container mx-auto justify-between flex items-center">
-        <div className="text-3xl font-bold text-blue-800">SafeSpeak</div>
-        <Avatar sx={{}}>PM</Avatar>
-      </div>
-    </nav>
-    <div className="container mt-5 mx-auto p-6 bg-white rounded-lg shadow-md">
+  return (
+    <>
+      <nav className="bg-white shadow-md p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="text-3xl font-bold text-blue-800">SafeSpeak</div>
+          <div className="flex items-center gap-4">
+            <Button variant="contained" color="secondary" onClick={handleInsightsRedirect}>
+              Insights
+            </Button>
+            <Avatar>CM</Avatar>
+          </div>
+        </div>
+      </nav>
 
-      <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
-      <TextField
-        label="Search Reports"
-        variant="outlined"
-        fullWidth
-        onChange={(e) => setFilter(e.target.value)}
-      />
-      <TableContainer component={Paper}className="mt-5">
-        <Table className="bg-blue-100">
-          <TableHead>
-            <TableRow>
-              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>ID</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Category</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Description</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Submitted On</TableCell>
-              <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Action</TableCell>
-            </TableRow>
-
-          </TableHead>
-          <TableBody>
-            {filteredReports.map((report) => (
-              <TableRow key={report._id}>
-                <TableCell>{report._id}</TableCell>
-                <TableCell>{report.category ? report.category : "No Category Present"}</TableCell>
-                <TableCell>{report.description}</TableCell>
-                <TableCell>{format(new Date(report.createdAt), "MMMM dd, yyyy 'at' hh:mm a")}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="primary" onClick={() => handleOpenDialog(report)}>
-                    View Details
-                  </Button>
-                </TableCell>
+      <div className="container mt-5 mx-auto p-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">All Reports</h2>
+        <TextField
+          label="Search Reports"
+          variant="outlined"
+          fullWidth
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <TableContainer component={Paper} className="mt-5">
+          <Table className="bg-blue-100">
+            <TableHead>
+              <TableRow>
+                <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>ID</TableCell>
+                <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Category</TableCell>
+                <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Description</TableCell>
+                <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Submitted On</TableCell>
+                <TableCell style={{ fontWeight: 'bold', color: 'blue' }}>Action</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {filteredReports.map((report) => (
+                <TableRow key={report._id}>
+                  <TableCell>{report._id}</TableCell>
+                  <TableCell>{report.category || "No Category Present"}</TableCell>
+                  <TableCell>{report.description}</TableCell>
+                  <TableCell>{format(new Date(report.createdAt), "MMMM dd, yyyy 'at' hh:mm a")}</TableCell>
+                  <TableCell>
+                    <Button variant="contained" color="primary" onClick={() => handleOpenDialog(report)}>
+                      View Details
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle><div className="text-2xl">Report Details</div></DialogTitle>
-        <DialogContent>
-          {selectedReport && (
-            <>
-              <h3 className="font-bold m-5 font-serif text-pretty text-xl text-">{selectedReport.description}</h3>
-              <img src={selectedReport.filesArray[0]} alt="Report" style={{ width: '100%', height: 'auto' }} />
-              <MapContainer center={[selectedReport.location.latitude, selectedReport.location.longitude]} zoom={13} style={{ height: "300px", width: "100%" }}>
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <Marker position={[selectedReport.location.latitude, selectedReport.location.longitude]}>
-                  <Popup>{selectedReport.description}</Popup>
-                </Marker>
-              </MapContainer>
-            </>
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
-  </>);
+        <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+          <DialogTitle><div className="text-2xl">Report Details</div></DialogTitle>
+          <DialogContent>
+            {selectedReport && (
+              <>
+                <h3 className="font-bold m-5 font-serif text-pretty text-xl text-">{selectedReport.description}</h3>
+                <img src={selectedReport.filesArray[0]} alt="Report" style={{ width: '100%', height: 'auto' }} />
+                <MapContainer center={[selectedReport.location.latitude, selectedReport.location.longitude]} zoom={13} style={{ height: "300px", width: "100%" }}>
+                  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  <Marker position={[selectedReport.location.latitude, selectedReport.location.longitude]}>
+                    <Popup>{selectedReport.description}</Popup>
+                  </Marker>
+                </MapContainer>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
+  );
 };
 
 export default ReportsPage;
